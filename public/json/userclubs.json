@@ -1,0 +1,14 @@
+[
+	{
+		"query": "INSERT INTO userclubs VALUES (2, 1);"
+	},
+    {
+		"query": "INSERT INTO userclubs VALUES (4, 4);"
+	},
+	{
+		"query": "INSERT INTO userclubs VALUES (3, 2);"
+	},
+    {
+		"query": "INSERT INTO userclubs VALUES (2, 3);"
+	}
+]

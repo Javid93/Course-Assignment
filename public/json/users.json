@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "query": "INSERT INTO users VALUES (1, 'System admin', 'myadmin@noroff.no', 'Admin', '00000000001', 'N/A', 'N/A', 'admin1234', 'admin');"
+    },
+    {
+        "id": 2,
+        "query": "INSERT INTO users VALUES (2, 'John Smith', 'jsmith@noroff.no', 'JSmith', '09117548023', 'Male', 'Christian', 'pass1234', 'student');"
+    },
+    {
+        "id": 3,
+        "query": "INSERT INTO users VALUES (3, 'Kelly Hansen', 'khansen@noroff.no', 'KHansen', '09109978989', 'Male', 'Christian', 'pass1234', 'student');"
+    },
+    {
+        "id": 4,
+        "query": "INSERT INTO users VALUES (4, 'George Olsen', 'golsen@noroff.no', 'GOlsen', '04129578967', 'Male', 'Catholic', 'pass1234', 'student');"
+    }
+]

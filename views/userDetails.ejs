@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="/stylesheets/styles.css">
+  <title>University Clubs</title>
+</head>
+
+<body>
+  <%- include('./partials/navbar.ejs', {user: user}) %>
+  <div class="container-fluid mt-5">
+    <h2 class="p-3 text-center">My Profile</h2>
+    <div class="list-group">
+      <div class="row px-3 py-1 w-120">
+        <span class="col py-2 bg-noroff"><h2>Full name</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Email</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Social Security Number</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Gender</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Religion</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Username</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Password</h2></span>
+        <span class="col py-2 bg-noroff"><h2>Role</h2></span>
+      </div>
+      <% userDetails.forEach(function(details) { %>
+        <div class="row px-3 py-1 w-120">
+          <span class="col py-1 bg-light">
+            <%=details.fullName%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.email%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.ssn%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.gender%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.religion%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.username%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.password%>
+          </span>
+          <span class="col py-1 bg-light">
+            <%=details.role%>
+          </span>
+        </div>
+        <% }); %>
+          <hr>
+    </div>
+  </div>
+</body>
+</html>

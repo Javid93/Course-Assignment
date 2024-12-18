@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> University Clubs </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <script src="../js/common.js"></script>
+</head>
+<body>
+    <%- include('./partials/navbar.ejs', {user: user}) %>
+        <div class="container-fluid mt-5">
+            <h2 class="p-3 text-center">Club Maintenance</h2>
+            <div class="list-group">
+                <div class="row px-3 py-1 w-100">
+                    <span class="col py-1 bg-noroff">Id</span>
+                    <span class="col py-1 bg-noroff">Name</span>
+                    <span class="col py-1 bg-noroff">Description</span>
+                    <span class="col py-1 bg-noroff">Date Created</span>
+                    <span class="col py-1 bg-noroff">Options</span>
+                </div>
+                <% clubs.forEach(function(club) { %>
+                    <div class="row px-3 py-1 w-100">
+                        <span class="col py-1 bg-light">
+                            <%=club.id%>
+                        </span>
+                        <span class="col py-1 bg-light">
+                            <%=club.Name%>
+                        </span>
+                        <span class="col py-1 bg-light">
+                            <%=club.Description%>
+                        </span>
+                        <span class="col py-1 bg-light text-right">
+                            <%=club.ClubCreatedDate%>
+                        </span>
+                        <span class="col py-1 bg-light text-center">
+                            <button class="btn btn-danger" onclick="deleteClub(<%=club.id%>)">Delete Club</button>
+                        </span>
+                    </div>
+                    <% }); %>
+                        <hr>
+                        <div class="row">
+                            <div class="col-4"></div>
+                            <div class="col-4 text-center mt-2">
+                                <button class="btn btn-success" id="btn-add-animal" onclick="addClub()">Add New Club</button>
+                            </div>
+                            <div class="col-4"></div>
+                        </div>
+            </div>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+[
+	{
+		"query": "INSERT INTO clubs VALUES (1, 'Photography Club', 'A club for the keen-eyed photographer. We have weekly phography challenges and everyone votes to see who took the best photo.', '2023-02-12');"
+	},
+	{
+		"query": "INSERT INTO clubs VALUES (2, 'Software Club', 'Anybody interested in the world of Software Development is welcome to join our Weekly meetings, where guests present some new technology or software.', '2020-01-10');"
+	},
+	{
+		"query": "INSERT INTO clubs VALUES (3, 'Gym Bros Club', 'A team of guys who just love working out in the university gym. Every morning, this club meets to participate in group workouts before class.', '2022-06-01');"
+	},
+	{
+		"query": "INSERT INTO clubs VALUES (4, 'Video Games Club', 'Video Game lovers getting together every Friday to play games and chat about new releases.', '2022-05-06');"
+	},
+	{
+		"query": "INSERT INTO clubs VALUES (5, 'Chess Club', 'A group of chess entheusiasts that play weekley matches against each other.', '2023-09-01');"
+	}
+]

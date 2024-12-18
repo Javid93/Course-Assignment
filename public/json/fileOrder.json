@@ -1,0 +1,11 @@
+[
+    {
+        "file": "clubs.json"
+    },
+    {
+        "file": "users.json"
+    },
+    {
+        "file": "userclubs.json"
+    }
+]
