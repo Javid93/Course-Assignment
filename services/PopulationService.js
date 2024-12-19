@@ -1,40 +1,48 @@
-// Populate Database
 const fs = require("fs");
+const bcrypt = require("bcrypt");
 const db = require("../models");
 
-async function populateDatabase(){
-    // Retrieve file order
+async function populateDatabase() {
     const fileOrder = fs.readFileSync('./public/json/fileOrder.json', 'utf8');
     const files = JSON.parse(fileOrder);
 
-    // Loop through JSON files
     for (const file of files) {
         console.info("Reading file:", file.file);
-        const tableName = file.file.replace('.json', '');
-        const tableCheck = db.sequelize.define(tableName);
-        const count = await tableCheck.count();
-        if (count === 0) {
-            // If Table is empty, populate from relavant JSON file.
-            let data = fs.readFileSync("./public/json/"+file.file, 'utf8'); 
-            // ExtractSQL
-            let queries = JSON.parse(data);
-            for (const query of queries) {
-                var runQuery = query.query;
-                console.info("Creating query:", runQuery);
-                try {
-                    // Running query
-                    await db.sequelize.query(runQuery);
-                } catch (err) {
-                    console.error(err);
+        if (file.file === "users.json") {
+            // Handle user-specific logic
+            const userData = JSON.parse(fs.readFileSync(`./public/json/${file.file}`, "utf8"));
+            for (const entry of userData) {
+                const rawQuery = entry.query;
+
+                // Extract password for hashing
+                const match = rawQuery.match(/'(.+?)', '(.+?)', '(.+?)', '(.+?)', '(.+?)', '(.+?)', '(.+?)', '(.+?)'/);
+                if (match) {
+                    const plainPassword = match[7]; // Extract plain-text password
+                    const hashedPassword = await bcrypt.hash(plainPassword, 10); // Hash the password
+                    const updatedQuery = rawQuery.replace(plainPassword, hashedPassword); // Replace password in query
+
+                    console.info("Executing hashed query:", updatedQuery);
+                    try {
+                        await db.sequelize.query(updatedQuery);
+                    } catch (err) {
+                        console.error("Error executing query:", err);
+                    }
                 }
             }
-        }else{
-            // Only empty tables will be populated
-            console.info("Table", tableName, "is not empty. Skipping this table's population");
+        } else {
+            // Handle non-user tables
+            const data = JSON.parse(fs.readFileSync(`./public/json/${file.file}`, "utf8"));
+            for (const entry of data) {
+                try {
+                    console.info("Executing query:", entry.query);
+                    await db.sequelize.query(entry.query);
+                } catch (err) {
+                    console.error("Error executing query:", err);
+                }
+            }
         }
     }
-    console.info("Database population complete");
+    console.info("Database population complete.");
 }
 
-// Run the function.
-populateDatabase();
+module.exports = { populateDatabase };

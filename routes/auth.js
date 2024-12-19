@@ -4,20 +4,29 @@ var LocalStrategy = require('passport-local');
 var db = require("../models");
 var UserService = require("../services/UserService");
 var userService = new UserService(db);
+var bcrypt = require('bcrypt'); // Add this import
+
+
 
 passport.use(new LocalStrategy(function verify(username, password, cb) {
-  
   userService.getOneByName(username).then((data) => {
-    if(data === null) {
-      return cb(null, false, { message: 'Wrong username or password!'});
+    if (data === null) {
+      return cb(null, false, { message: 'Wrong username or password!' });
     }
-    if (data.password !== password) {
-      return cb(null, false, { message: 'Wrong username or password!'});
-    }
-    return cb(null, data);
-    });  
-  }
-));
+
+    // Use bcrypt.compare to check hashed password
+    bcrypt.compare(password, data.password, (err, isMatch) => {
+      if (err) return cb(err);
+      if (!isMatch) {
+        return cb(null, false, { message: 'Wrong username or password!' });
+      }
+      return cb(null, data);
+    });
+  }).catch(err => cb(err));
+}));
+
+
+
 
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {

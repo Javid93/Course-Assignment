@@ -11,6 +11,10 @@ var flash = require('connect-flash');
 
 var db = require("./models");
 
+
+const bcrypt = require('bcrypt');
+
+
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var clubsRouter = require('./routes/clubs');
@@ -61,6 +65,35 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+
+
+// Function to hash existing plaintext passwords
+async function hashExistingPasswords() {
+    const users = await db.User.findAll();
+    for (const user of users) {
+        if (!user.password.startsWith('$2b$')) { // Check if already hashed
+            console.log(`Hashing password for user: ${user.username}`);
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
+            await user.save();
+        }
+    }
+    console.log("All existing passwords hashed successfully.");
+}
+
+// Sync database and handle initialization
+db.sequelize.sync({ force: false }).then(async () => {
+    console.log("Database synced successfully!");
+
+    // Populate database (if required)
+    const { populateDatabase } = require('./services/PopulationService');
+    await populateDatabase();
+
+    // Hash passwords immediately after populating
+    await hashExistingPasswords();
 });
 
 module.exports = app;
