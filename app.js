@@ -36,14 +36,44 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: 'd7salls Sndua2',
-  resave: false,
-  saveUninitialized: false,
-  store: new SQLiteStore()
-}));
+
+
+app.use(
+  session({
+      secret: 'd7salls Sndua2',
+      resave: false,
+      saveUninitialized: false,
+      store: new SQLiteStore(),
+      cookie: {
+        maxAge: 30 * 60 * 1000, // 15 minutes
+
+      },
+  })
+);
+
+
+
 app.use(flash());
 app.use(passport.authenticate('session'));
+
+app.use((req, res, next) => {
+  if (req.session) {
+      const now = Date.now();
+      const sessionExpiry = req.session.cookie._expires || req.session.cookie.maxAge + now;
+
+      // If the session has expired, log out the user and redirect to login
+      if (sessionExpiry < now) {
+          req.logout(function (err) {
+              if (err) {
+                  return next(err);
+              }
+              return res.redirect('/login');
+          });
+      }
+  }
+  next();
+});
+
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
