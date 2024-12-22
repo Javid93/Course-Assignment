@@ -21,7 +21,6 @@ module.exports = {
                 res.redirect('/login');
             }
         }else{
-            // res.status(401).send(new Error());
             res.redirect('/login');
         }
     },

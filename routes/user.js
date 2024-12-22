@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 const ClubService = require('../services/ClubService');
 var jsonParser = bodyParser.json();
 
-//Endpoint to display a Order's Details
+
 router.get('/:id', checkIfAuthorized, jsonParser, async function (req, res, next) {
   	const userId = req.params.id;
 	const userDetails = await userService.getUserDetails(userId);

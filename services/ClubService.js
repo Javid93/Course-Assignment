@@ -29,8 +29,10 @@ class ClubService {
     //Admin adds a new club
     async addClub(clubName, clubDescription, dateCreated) {
         await this.client.query(
-            'INSERT INTO clubs (Name, Description, ClubCreatedDate) VALUES ("' + clubName + '", "' + clubDescription + '", "' + dateCreated + '");'
+            'INSERT INTO clubs (Name, Description, ClubCreatedDate) VALUES (?, ?, ?)',
+            { replacements: [clubName, clubDescription, dateCreated], type: this.client.QueryTypes.INSERT }
         );
+        
         return;
     }
 

@@ -4,7 +4,7 @@ var LocalStrategy = require('passport-local');
 var db = require("../models");
 var UserService = require("../services/UserService");
 var userService = new UserService(db);
-var bcrypt = require('bcrypt'); // Add this import
+var bcrypt = require('bcrypt'); 
 
 
 
@@ -14,7 +14,6 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
       return cb(null, false, { message: 'Wrong username or password!' });
     }
 
-    // Use bcrypt.compare to check hashed password
     bcrypt.compare(password, data.password, (err, isMatch) => {
       if (err) return cb(err);
       if (!isMatch) {
@@ -24,8 +23,6 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
     });
   }).catch(err => cb(err));
 }));
-
-
 
 
 passport.serializeUser(function(user, cb) {
@@ -74,7 +71,6 @@ router.post('/signup', async function(req, res, next) {
     await userService.create(fullName, req.body.username, req.body.password, req.body.email, req.body.ssn, req.body.gender, req.body.religion, "student");
     res.redirect('/login');
   }catch(error){
-    // checks if there are more users with the same username.
     req.flash('error', error);
     res.render('signup', {message: req.flash('error')});
   }

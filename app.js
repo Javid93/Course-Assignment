@@ -45,12 +45,11 @@ app.use(
       saveUninitialized: false,
       store: new SQLiteStore(),
       cookie: {
-        maxAge: 30 * 60 * 1000, // 15 minutes
+        maxAge: 1 * 60 * 1000, // 15 minutes
 
       },
   })
 );
-
 
 
 app.use(flash());
@@ -61,7 +60,6 @@ app.use((req, res, next) => {
       const now = Date.now();
       const sessionExpiry = req.session.cookie._expires || req.session.cookie.maxAge + now;
 
-      // If the session has expired, log out the user and redirect to login
       if (sessionExpiry < now) {
           req.logout(function (err) {
               if (err) {
@@ -86,44 +84,11 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-
-
-
-// Function to hash existing plaintext passwords
-async function hashExistingPasswords() {
-    const users = await db.User.findAll();
-    for (const user of users) {
-        if (!user.password.startsWith('$2b$')) { // Check if already hashed
-            console.log(`Hashing password for user: ${user.username}`);
-            const hashedPassword = await bcrypt.hash(user.password, 10);
-            user.password = hashedPassword;
-            await user.save();
-        }
-    }
-    console.log("All existing passwords hashed successfully.");
-}
-
-// Sync database and handle initialization
 db.sequelize.sync({ force: false }).then(async () => {
-    console.log("Database synced successfully!");
+  const { populateDatabase } = require('./services/PopulationService');
+  await populateDatabase();
 
-    // Populate database (if required)
-    const { populateDatabase } = require('./services/PopulationService');
-    await populateDatabase();
-
-    // Hash passwords immediately after populating
-    await hashExistingPasswords();
 });
+
 
 module.exports = app;
